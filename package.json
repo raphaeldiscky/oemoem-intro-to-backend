@@ -1,0 +1,18 @@
+{
+  "name": "oem-oem-2021",
+  "version": "1.0.0",
+  "description": "oem-oem oti",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "raphael",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.12",
+    "superheroes": "^3.0.0"
+  }
+}
