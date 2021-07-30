@@ -13,8 +13,9 @@
 // check stateofjs.com
 // creating our first server with express
 const express = require('express')
-const axios = require('axios')
 const app = express() // simpy function that represent express module
+const axios = require('axios')
+const mongoose = require('mongoose')
 
 // app.get('/', (req, res) => { // function dari express, dipanggil setiap browser melakukan get request ke server kita
 //     res.send("<h3>Home Hello World!</h3>")
@@ -49,7 +50,6 @@ const kelToCel = (k) => {
     return Math.round(k - 273)
 }
 
-
 app.get("/", async (req,res) => {
     res.sendFile(__dirname + "/index2.html")
 })
@@ -79,6 +79,61 @@ app.post("/", async (req,res) => {
 
 })
 
+
+mongoose.connect("mongodb://localhost:27017/test2021", {useNewUrlParser: true, useUnifiedTopology: true})
+let db = mongoose.connection
+
+db.on("connected", () => {
+    console.log("Connected to MongoDB using Mongoose");
+})
+
+const articleShcema = {
+    title: String,
+    content: String
+}
+
+const Article = mongoose.model("Article", articleShcema)
+
+// create new article
+app.post("/articles", (req, res) => {
+//   console.log(req.body.title);
+//   console.log(req.body.content);
+  const newArticle = new Article({
+      title: req.body.title,
+      content: req.body.content
+  })
+
+  newArticle.save((err) => {
+      if(!err) {
+          res.send("Successfullly added a new article!")
+      } else {
+          res.send(err)
+      }
+  })
+})
+
+// find all articles
+app.get("/articles", (req, res) => {
+    Article.find((err, foundArticle) => {
+        if(!err) {
+            res.send(foundArticle)
+        } else {
+            res.send(err)
+        }
+    })
+})
+
+// delete all articles
+app.delete("/articles", (req, res) => {
+    Article.deleteMany((err) => {
+        if(!err){
+            res.send("Successfully deleted all articles!")
+        } else {
+            res.send(err)
+        }
+    })
+})
+
 app.listen(3000, () => {
     console.log('Server running on port 3000');
 })
@@ -87,4 +142,5 @@ app.listen(3000, () => {
 // make input city with post method
 // app.use(express.urlencoded()) -> request data to be sent encoded in the URL 
 
-//connect to DB
+// build your own restful api
+// 
