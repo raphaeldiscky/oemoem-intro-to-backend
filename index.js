@@ -45,8 +45,13 @@ const app = express() // simpy function that represent express module
 require('dotenv').config()
 app.use(express.urlencoded({extended: true})) 
 
+const kelToCel = (k) => {
+    return Math.round(k - 273)
+}
+
+
 app.get("/", async (req,res) => {
-   res.sendFile(__dirname + "/index2.html")
+    res.sendFile(__dirname + "/index2.html")
 })
 
 app.post("/", async (req,res) => {
@@ -63,15 +68,15 @@ app.post("/", async (req,res) => {
         // using template literal
         res.send(`
             <p>The weather is currently ${weatherDesc}<p>
-            <h1>The temperature in ${cityName} is ${temp} degrees Celcius.</h1>
+            <h1>The temperature in ${cityName} is ${kelToCel(temp)} degrees Celcius.</h1>
             <img src=${iconURL}>
         `)
-        
 
     } catch (error) {
         // console.error(error);
         res.send("<h1>Location not Found!</h1>")
     }
+
 })
 
 app.listen(3000, () => {
@@ -81,3 +86,5 @@ app.listen(3000, () => {
 // instal dotenv
 // make input city with post method
 // app.use(express.urlencoded()) -> request data to be sent encoded in the URL 
+
+//connect to DB
