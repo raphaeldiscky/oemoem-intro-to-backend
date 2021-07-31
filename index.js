@@ -80,7 +80,7 @@ app.post('/', async (req, res) => {
   }
 })
 
-mongoose.connect('mongodb://localhost:27017/test2021', {
+mongoose.connect(String(process.env.URI_ATLAS), {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
