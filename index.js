@@ -1,5 +1,12 @@
+// Server = computer that receives requests
+// App = listens for requests, retrieves information from the database, and sends a response
+// Databases = used to organize and persist dat
+
 // run node index.js
 // console.log("Hello World!")
+
+// penjelasan mengenai express
+// check stateofjs.com
 
 // penjelasan mengenai npm
 // npm init
@@ -9,8 +16,6 @@
 // const myHero = superheroes.random()
 // console.log(myHero)
 
-// penjelasan mengenai express
-// check stateofjs.com
 // creating our first server with express
 const express = require('express')
 const app = express() // simply function that represent express module
@@ -44,6 +49,9 @@ const mongoose = require('mongoose')
 
 // instal axios for handling HTTP request
 require('dotenv').config()
+const ejs = require('ejs')
+app.set('view engine', 'ejs')
+
 app.use(express.urlencoded({ extended: true }))
 
 const kelToCel = (k) => {
@@ -51,6 +59,7 @@ const kelToCel = (k) => {
 }
 
 app.get('/', async (req, res) => {
+  // dipanggil setiap browser melakukan get request ke server kita
   res.sendFile(__dirname + '/index2.html')
 })
 
@@ -80,12 +89,18 @@ app.post('/', async (req, res) => {
   }
 })
 
+// instal dotenv
+// make input city with post method
+// app.use(express.urlencoded()) -> request data to be sent encoded in the URL
+
+// connect database
 mongoose.connect(String(process.env.URI_ATLAS), {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-let db = mongoose.connection
 
+// check connection
+let db = mongoose.connection
 db.on('connected', () => {
   console.log('Connected to MongoDB using Mongoose')
 })
@@ -99,8 +114,13 @@ const articleShcema = {
 // create model
 const Article = mongoose.model('Article', articleShcema)
 
+// ejs
+app.get('/create-article', (req, res) => {
+  res.render('create-article')
+})
+
 // create new article
-app.post('/articles', (req, res) => {
+app.post('/create-article', (req, res) => {
   //   console.log(req.body.title);
   //   console.log(req.body.content);
   const newArticle = new Article({
@@ -110,7 +130,8 @@ app.post('/articles', (req, res) => {
 
   newArticle.save((err) => {
     if (!err) {
-      res.send('Successfullly added a new article!')
+      // res.send('Successfullly added a new article!')
+      res.redirect('/articles')
     } else {
       res.send(err)
     }
@@ -121,7 +142,10 @@ app.post('/articles', (req, res) => {
 app.get('/articles', (req, res) => {
   Article.find((err, foundArticle) => {
     if (!err) {
-      res.send(foundArticle)
+      // res.send(foundArticle)
+      res.render('articles', {
+        articles: foundArticle
+      })
     } else {
       res.send('Articles is empty!')
     }
@@ -180,9 +204,5 @@ app.delete('/articles/:id', (req, res) => {
 app.listen(3000, () => {
   console.log('Server running on port 3000')
 })
-
-// instal dotenv
-// make input city with post method
-// app.use(express.urlencoded()) -> request data to be sent encoded in the URL
 
 // build your own restful api
