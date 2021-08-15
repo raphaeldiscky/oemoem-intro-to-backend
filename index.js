@@ -131,7 +131,7 @@ app.post('/create-article', (req, res) => {
   newArticle.save((err) => {
     if (!err) {
       // res.send('Successfullly added a new article!')
-      res.redirect('/articles')
+      res.redirect('/articles') // ejs
     } else {
       res.send(err)
     }
@@ -191,10 +191,11 @@ app.put('/articles/:id', (req, res) => {
 })
 
 // delete specific article by id
-app.delete('/articles/:id', (req, res) => {
+app.post('/articles/:id', (req, res) => {
   Article.deleteOne({ _id: req.params.id }, (err) => {
     if (!err) {
-      res.send('Successfully deleted article')
+      // res.send('Successfully deleted article')
+      res.redirect('/articles') //ejs
     } else {
       res.send(err)
     }

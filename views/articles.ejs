@@ -1,2 +1,10 @@
 <h1>All Articles</h1>
-<p><%=articles%></p>
+<% articles.forEach((article) => { %>
+<h3><%= article.title %></h3>
+<p><%= article.content %></p>
+<form action="/articles/<%=article._id%>" method="post">
+  <button type="submit" name="button">delete</button>
+</form>
+<% }) %>
+<p><%articles%></p>
+<a href="/create-article">Create Article</a>
