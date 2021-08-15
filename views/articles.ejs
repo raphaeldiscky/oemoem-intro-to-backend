@@ -2,9 +2,11 @@
 <% articles.forEach((article) => { %>
 <h3><%= article.title %></h3>
 <p><%= article.content %></p>
+<a href="/articles/<%=article._id%>">read more</a>
 <form action="/articles/<%=article._id%>" method="post">
   <button type="submit" name="button">delete</button>
 </form>
+<hr />
 <% }) %>
 <p><%articles%></p>
 <a href="/create-article">Create Article</a>

@@ -167,7 +167,12 @@ app.delete('/articles', (req, res) => {
 app.get('/articles/:id', (req, res) => {
   Article.findOne({ _id: req.params.id }, (err, foundArticle) => {
     if (foundArticle) {
-      res.send(foundArticle)
+      // res.send(foundArticle)
+      // ejs
+      res.render('article', {
+        title: foundArticle.title,
+        content: foundArticle.content
+      })
     } else {
       res.send('Article not found!')
     }
